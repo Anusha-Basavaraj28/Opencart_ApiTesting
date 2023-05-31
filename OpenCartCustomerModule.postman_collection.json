@@ -1,0 +1,209 @@
+{
+	"info": {
+		"_postman_id": "30ca81f1-5114-4e9d-80c6-5da0d1b0d711",
+		"name": "OpenCartCustomerModule",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27589207"
+	},
+	"item": [
+		{
+			"name": "create session token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"var jsonData=pm.response.json();\r",
+							"pm.test(\"verifying the response data\",()=>{\r",
+							"pm.expect(jsonData.success).to.eql(\"Success: API session successfully started!\")\r",
+							"pm.collectionVariables.set(\"api_token\",jsonData.api_token);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "demo",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "St5yE7GK4Hco3IFwIJ3YHrvkSaira3MO2eAcqdPcFFK3mHtnSbpqyBTi7pXyvzZoIdICKNv6XyXH37q2mTnZesZyzRD0ljdzSxajiooF5ZW8N7LvhtjpWE0bgDfZj6fCot8CP11Nw2Er0NPPpQ5fzFUM5vBxT3L26xMydrktASs4gCNydKnqDusMuEmNDknJuGjilX6aqZ4Jfr8DdnPMUvjXgLAZG4do2aD5JJaFTbhzOqCSrtdHiKtgIPhRSDBN",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}api/login",
+					"host": [
+						"{{baseURL}}api"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add customer",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var randomName=Math.random().toString(36).substring(2);\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"first_name\",\"jim\"+randomName);\r",
+							"pm.collectionVariables.set(\"last_name\",randomName);\r",
+							"pm.collectionVariables.set(\"email\",randomName+\"@gmail.com\");\r",
+							"pm.collectionVariables.set(\"telephone\",\"+1323456789\");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"verify status code\",()=>{\r",
+							"pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"verify success data in response\",()=>{\r",
+							"pm.expect(pm.response.json().success).to.eql(\"You have successfully modified customers\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "{{api_token}}",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "api_token",
+							"type": "string"
+						},
+						{
+							"key": "in",
+							"value": "query",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "firstname",
+							"value": "{{first_name}}",
+							"type": "text"
+						},
+						{
+							"key": "lastname",
+							"value": "{{last_name}}",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "{{email}}",
+							"type": "text"
+						},
+						{
+							"key": "telephone",
+							"value": "{{telephone}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseURL}}api/customer",
+					"host": [
+						"{{baseURL}}api"
+					],
+					"path": [
+						"customer"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ip",
+			"value": "192.168.7.187",
+			"type": "string"
+		},
+		{
+			"key": "baseURL",
+			"value": "http://{{ip}}/opencart/upload/index.php?route=",
+			"type": "string"
+		},
+		{
+			"key": "api_token",
+			"value": ""
+		},
+		{
+			"key": "first_name",
+			"value": ""
+		},
+		{
+			"key": "last_name",
+			"value": ""
+		},
+		{
+			"key": "email",
+			"value": ""
+		},
+		{
+			"key": "telephone",
+			"value": ""
+		}
+	]
+}
